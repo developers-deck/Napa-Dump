@@ -34,8 +34,42 @@ model Ward {
   id         Int      @id @default(autoincrement())
   name       String
   postcode   String?
+  streets    Street[]
   districtId Int
   district   District @relation(fields: [districtId], references: [id])
 
   @@map("wards")
+}
+
+model Street {
+  id       Int     @id @default(autoincrement())
+  name     String
+  postcode String?
+  roads    Road[]
+  wardId   Int
+  ward     Ward    @relation(fields: [wardId], references: [id])
+
+  @@map("streets")
+}
+
+model Road {
+  id        Int       @id @default(autoincrement())
+  name      String
+  postcode  String?
+  addresses Address[]
+  streetId  Int
+  street    Street    @relation(fields: [streetId], references: [id])
+
+  @@map("roads")
+}
+
+model Address {
+  id       Int     @id @default(autoincrement())
+  name     String
+  postcode String?
+  roadId   Int?
+  Road     Road?   @relation(fields: [roadId], references: [id])
+  wardId   Int?
+
+  @@map("addresses")
 }
